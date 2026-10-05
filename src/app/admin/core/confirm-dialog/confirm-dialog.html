@@ -1,0 +1,17 @@
+@if (confirmService.estado().visible) {
+  <div class="tf-modal-overlay" (click)="confirmService.responder(false)">
+    <div class="tf-modal-panel tf-confirm-panel" (click)="$event.stopPropagation()">
+      <h2>{{ confirmService.estado().titulo }}</h2>
+      <p>{{ confirmService.estado().mensaje }}</p>
+
+      <div class="tf-form-actions">
+        <button type="button" class="tf-btn tf-btn--danger" (click)="confirmService.responder(true)">
+          {{ confirmService.estado().textoConfirmar }}
+        </button>
+        <button type="button" class="tf-btn tf-btn--outline" (click)="confirmService.responder(false)">
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+}

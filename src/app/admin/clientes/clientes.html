@@ -1,0 +1,120 @@
+<div class="tf-page-head">
+  <div>
+    <h1>Clientes</h1>
+    <p>Datos de contacto y ficha de cada cliente.</p>
+  </div>
+  <button type="button" class="tf-btn tf-btn--primary tf-btn--sm" (click)="abrirNuevo()">
+    <span class="material-icons">add</span>
+    Nuevo cliente
+  </button>
+</div>
+
+<div class="tf-panel">
+  <div class="tf-field" style="max-width: 320px;">
+    <label for="busqueda">Buscar</label>
+    <input
+      id="busqueda"
+      type="text"
+      placeholder="Nombre del cliente…"
+      [ngModel]="busqueda()"
+      (ngModelChange)="busqueda.set($event)"
+      (keyup.enter)="buscar()"
+    />
+  </div>
+</div>
+
+@if (mostrarForm()) {
+  <div class="tf-modal-overlay" (click)="cancelar()">
+    <div class="tf-modal-panel" (click)="$event.stopPropagation()">
+      <button type="button" class="tf-modal-close" (click)="cancelar()" aria-label="Cerrar">
+        <span class="material-icons">close</span>
+      </button>
+
+      <h2>{{ editandoId ? 'Editar cliente' : 'Nuevo cliente' }}</h2>
+
+      <div class="tf-form-grid">
+        <div class="tf-field">
+          <label for="nombre">Nombre completo</label>
+          <input id="nombre" type="text" [(ngModel)]="form.nombre_completo" />
+        </div>
+        <div class="tf-field">
+          <label for="telefono">Teléfono</label>
+          <input id="telefono" type="tel" [(ngModel)]="form.telefono" />
+        </div>
+        <div class="tf-field">
+          <label for="whatsapp">WhatsApp</label>
+          <input id="whatsapp" type="tel" [(ngModel)]="form.whatsapp" />
+        </div>
+        <div class="tf-field">
+          <label for="correo">Correo</label>
+          <input id="correo" type="email" [(ngModel)]="form.correo" />
+        </div>
+        <div class="tf-field" style="grid-column: 1 / -1;">
+          <label for="direccion">Dirección</label>
+          <input id="direccion" type="text" [(ngModel)]="form.direccion" />
+        </div>
+        <div class="tf-field" style="grid-column: 1 / -1;">
+          <label for="notas">Notas</label>
+          <textarea id="notas" [(ngModel)]="form.notas"></textarea>
+        </div>
+      </div>
+
+      @if (error()) {
+        <p style="color:#f28b85; font-size:0.85rem; margin-top: 1rem;">{{ error() }}</p>
+      }
+
+      <div class="tf-form-actions">
+        <button type="button" class="tf-btn tf-btn--primary" [disabled]="guardando()" (click)="guardar()">
+          {{ guardando() ? 'Guardando…' : 'Guardar' }}
+        </button>
+        <button type="button" class="tf-btn tf-btn--outline" (click)="cancelar()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+}
+
+<div class="tf-table-wrap">
+  <table class="tf-table">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Teléfono</th>
+        <th>Correo</th>
+        <th>Registro</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (cliente of clientes(); track cliente.documentId) {
+        <tr [routerLink]="['/admin/clientes', cliente.documentId]" style="cursor: pointer;">
+          <td class="is-strong">{{ cliente.nombre_completo }}</td>
+          <td>{{ cliente.telefono }}</td>
+          <td>{{ cliente.correo || '—' }}</td>
+          <td>{{ cliente.fecha_registro | date: 'd/MM/yyyy' }}</td>
+          <td>
+            <div class="tf-row-actions">
+              <button type="button" class="tf-icon-btn" (click)="editar(cliente); $event.stopPropagation()" aria-label="Editar">
+                <span class="material-icons">edit</span>
+              </button>
+              <button
+                type="button"
+                class="tf-icon-btn tf-icon-btn--danger"
+                (click)="eliminar(cliente); $event.stopPropagation()"
+                aria-label="Eliminar"
+              >
+                <span class="material-icons">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  @if (!cargando() && clientes().length === 0) {
+    <div class="tf-empty">No hay clientes registrados todavía.</div>
+  }
+  @if (cargando()) {
+    <div class="tf-empty">Cargando…</div>
+  }
+</div>

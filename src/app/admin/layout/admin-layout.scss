@@ -1,0 +1,200 @@
+.tf-admin {
+  min-height: 100svh;
+  display: flex;
+  background: var(--bg-page);
+}
+
+.tf-admin__sidebar {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  flex: 0 0 240px;
+  display: flex;
+  flex-direction: column;
+  background: var(--tf-black);
+  border-right: 1px solid var(--border-hairline);
+  padding: var(--sp-5) var(--sp-4);
+}
+
+.tf-admin__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0 0.25rem;
+  margin-bottom: var(--sp-6);
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.tf-admin__mark {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+.tf-admin__mobile-close {
+  display: none;
+}
+
+.tf-admin__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex: 1;
+}
+
+.tf-admin__nav a {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: var(--r-sm);
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background 0.15s ease, color 0.15s ease;
+
+  .material-icons {
+    font-size: 19px;
+  }
+}
+
+.tf-admin__nav a:hover {
+  background: var(--tf-white-04);
+  color: var(--text-primary);
+}
+
+.tf-admin__nav a.is-active {
+  background: var(--tf-blue-08);
+  color: var(--text-primary);
+}
+
+.tf-admin__user {
+  border-top: 1px solid var(--border-hairline);
+  padding-top: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.tf-admin__user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  padding: 0 0.25rem;
+
+  .material-icons {
+    font-size: 22px;
+    color: var(--text-muted);
+  }
+}
+
+.tf-admin__logout {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border-hairline);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+
+  .material-icons {
+    font-size: 18px;
+  }
+}
+
+.tf-admin__logout:hover {
+  background: var(--tf-white-04);
+  color: var(--text-primary);
+}
+
+.tf-admin__mobile-toggle {
+  display: none;
+}
+
+.tf-admin__content {
+  flex: 1;
+  min-width: 0;
+  padding: var(--sp-6);
+}
+
+@media (max-width: 900px) {
+  /* El sidebar pasa a position:fixed (sale del flujo), pero .tf-admin
+     seguía en flex-direction:row (el default, nunca se cambió para
+     móvil) — el mobile-toggle y el <main> quedaban peleándose el ancho
+     en la misma fila en vez de apilarse, y el contenido se salía de
+     pantalla por la derecha. */
+  .tf-admin {
+    flex-direction: column;
+  }
+
+  .tf-admin__sidebar {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    width: 100%;
+    padding: var(--sp-6) var(--sp-5);
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+  }
+
+  .tf-admin__nav a {
+    padding: 0.9rem 0.9rem;
+    font-size: 1rem;
+  }
+
+  .tf-admin__brand {
+    justify-content: space-between;
+  }
+
+  .tf-admin__mobile-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid var(--border-hairline);
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+
+    .material-icons {
+      font-size: 18px;
+    }
+  }
+
+  .tf-admin--menu-open .tf-admin__sidebar {
+    transform: translateX(0);
+  }
+
+  .tf-admin__mobile-toggle {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    width: 100%;
+    height: 56px;
+    padding: 0 var(--sp-4);
+    background: var(--tf-black);
+    border-bottom: 1px solid var(--border-hairline);
+    color: var(--text-primary);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+
+  .tf-admin__content {
+    padding: var(--sp-4);
+  }
+}

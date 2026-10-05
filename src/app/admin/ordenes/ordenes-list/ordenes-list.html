@@ -1,0 +1,171 @@
+<div class="tf-page-head">
+  <div>
+    <h1>Órdenes de servicio</h1>
+    <p>Todas las órdenes, con su folio y estado actual.</p>
+  </div>
+  <button type="button" class="tf-btn tf-btn--primary tf-btn--sm" (click)="abrirNueva()">
+    <span class="material-icons">add</span>
+    Nueva orden
+  </button>
+</div>
+
+@if (mostrarForm()) {
+  <div class="tf-modal-overlay" (click)="cancelar()">
+    <div class="tf-modal-panel" (click)="$event.stopPropagation()">
+      <button type="button" class="tf-modal-close" (click)="cancelar()" aria-label="Cerrar">
+        <span class="material-icons">close</span>
+      </button>
+
+      <h2>Nueva orden de servicio</h2>
+
+      <div class="tf-form-grid">
+        <div class="tf-field">
+          <label for="cliente">Cliente</label>
+          <select id="cliente" [(ngModel)]="clienteId" (ngModelChange)="alCambiarCliente()">
+            <option [ngValue]="null">Selecciona un cliente…</option>
+            @for (cliente of clientes(); track cliente.id) {
+              <option [ngValue]="cliente.id">{{ cliente.nombre_completo }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="tf-field">
+          <label for="equipo">Equipo</label>
+          <select id="equipo" [(ngModel)]="equipoId" [disabled]="!clienteId">
+            <option [ngValue]="null">
+              {{ clienteId ? 'Selecciona un equipo…' : 'Primero elige un cliente' }}
+            </option>
+            @for (equipo of equiposDelCliente(); track equipo.id) {
+              <option [ngValue]="equipo.id">{{ equipo.tipo }} — {{ equipo.marca }} {{ equipo.modelo }}</option>
+            }
+          </select>
+          @if (clienteId && !mostrarNuevoEquipo()) {
+            <button type="button" class="tf-inline-link" (click)="abrirNuevoEquipo()">
+              <span class="material-icons">add</span>
+              {{ equiposDelCliente().length === 0 ? 'Este cliente no tiene equipos — agregar uno' : 'Agregar otro equipo' }}
+            </button>
+          }
+        </div>
+
+        @if (mostrarNuevoEquipo()) {
+          <div class="tf-quick-equipo" style="grid-column: 1 / -1;">
+            <div class="tf-form-grid">
+              <div class="tf-field">
+                <label for="nuevoTipo">Tipo</label>
+                <select id="nuevoTipo" [(ngModel)]="nuevoEquipo.tipo">
+                  @for (tipo of tiposEquipo; track tipo) {
+                    <option [value]="tipo">{{ tipo }}</option>
+                  }
+                </select>
+              </div>
+              <div class="tf-field">
+                <label for="nuevaMarca">Marca</label>
+                <input id="nuevaMarca" type="text" [(ngModel)]="nuevoEquipo.marca" />
+              </div>
+              <div class="tf-field">
+                <label for="nuevoModelo">Modelo</label>
+                <input id="nuevoModelo" type="text" [(ngModel)]="nuevoEquipo.modelo" />
+              </div>
+            </div>
+            <div class="tf-form-actions">
+              <button
+                type="button"
+                class="tf-btn tf-btn--outline-sm"
+                [disabled]="guardandoEquipo()"
+                (click)="crearEquipoRapido()"
+              >
+                {{ guardandoEquipo() ? 'Creando…' : 'Crear equipo' }}
+              </button>
+              <button type="button" class="tf-btn tf-btn--outline-sm" (click)="cancelarNuevoEquipo()">
+                Cancelar
+              </button>
+            </div>
+          </div>
+        }
+
+        <div class="tf-field" style="grid-column: 1 / -1;">
+          <label for="problema">Problema reportado</label>
+          <textarea id="problema" [(ngModel)]="problemaReportado"></textarea>
+        </div>
+
+        <div class="tf-field" style="grid-column: 1 / -1;">
+          <label for="servicio">Servicio solicitado (opcional)</label>
+          <input id="servicio" type="text" [(ngModel)]="servicioSolicitado" />
+        </div>
+      </div>
+
+      @if (error()) {
+        <p style="color:#f28b85; font-size:0.85rem; margin-top: 1rem;">{{ error() }}</p>
+      }
+
+      <div class="tf-form-actions">
+        <button type="button" class="tf-btn tf-btn--primary" [disabled]="guardando()" (click)="crear()">
+          {{ guardando() ? 'Creando…' : 'Crear orden' }}
+        </button>
+        <button type="button" class="tf-btn tf-btn--outline" (click)="cancelar()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+}
+
+<div class="tf-panel" style="display:flex; gap:0.5rem; flex-wrap:wrap; padding: 0.75rem;">
+  <button
+    type="button"
+    class="tf-btn tf-btn--outline-sm"
+    [class.tf-btn--primary]="filtroEstado() === 'todos'"
+    (click)="cambiarFiltro('todos')"
+  >
+    Todos
+  </button>
+  @for (estado of estados; track estado.valor) {
+    <button
+      type="button"
+      class="tf-btn tf-btn--outline-sm"
+      [class.tf-btn--primary]="filtroEstado() === estado.valor"
+      (click)="cambiarFiltro(estado.valor)"
+    >
+      {{ estado.etiqueta }}
+    </button>
+  }
+</div>
+
+<div class="tf-table-wrap">
+  <table class="tf-table">
+    <thead>
+      <tr>
+        <th>Folio</th>
+        <th>Cliente</th>
+        <th>Equipo</th>
+        <th>Estado</th>
+        <th>Recepción</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (orden of ordenes(); track orden.documentId) {
+        <tr [routerLink]="['/admin/ordenes', orden.documentId]" style="cursor: pointer;">
+          <td class="is-strong">{{ orden.folio }}</td>
+          <td>{{ orden.cliente?.nombre_completo || '—' }}</td>
+          <td>{{ orden.equipo?.tipo }} {{ orden.equipo?.marca }}</td>
+          <td>
+            <span class="tf-badge" [class]="'tf-badge--' + orden.estado">
+              <span class="dot"></span>
+              {{ etiquetaEstado(orden.estado) }}
+            </span>
+          </td>
+          <td>{{ orden.fecha_recepcion | date: 'd/MM/yyyy' }}</td>
+          <td>
+            <span class="material-icons" style="color: var(--text-muted);">chevron_right</span>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  @if (!cargando() && ordenes().length === 0) {
+    <div class="tf-empty">No hay órdenes con este filtro.</div>
+  }
+  @if (cargando()) {
+    <div class="tf-empty">Cargando…</div>
+  }
+</div>

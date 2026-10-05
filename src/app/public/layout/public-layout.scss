@@ -1,0 +1,355 @@
+.tf-header {
+  position: sticky;
+  top: 0;
+  /* más alto que .tf-sheet (60): el botón que abre/cierra el menú (con su
+     ícono de X) vive en el header — si el sheet a pantalla completa queda
+     por encima, lo tapa y no se puede cerrar. */
+  z-index: 65;
+  background: rgba(5, 7, 10, 0.82);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border-hairline);
+}
+
+.tf-header__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+}
+
+.tf-header__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.tf-header__mark {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+}
+
+.tf-header__name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+}
+
+.tf-header__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+
+  a {
+    font-family: var(--font-body);
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+
+  a:hover,
+  a.is-active {
+    color: var(--text-primary);
+  }
+}
+
+.tf-header__folio {
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--border-hairline);
+  color: var(--text-primary) !important;
+}
+
+.tf-header__folio:hover {
+  border-color: var(--border-hover);
+  background: var(--tf-white-04);
+}
+
+/* Botón hamburguesa: icon-button circular, solo visible en móvil */
+.tf-header__toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border-hairline);
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+
+  .material-icons {
+    font-size: 20px;
+  }
+}
+
+.tf-header__toggle:hover {
+  background: var(--tf-white-04);
+  border-color: var(--border-hover);
+}
+
+/* Menú móvil: sheet a pantalla completa, no un dropdown */
+.tf-sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: radial-gradient(120% 44% at 50% 0%, var(--tf-blue-08), transparent 60%), var(--tf-black);
+  padding: calc(72px + env(safe-area-inset-top)) var(--gutter) calc(32px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  animation: tf-sheet-in 0.24s ease both;
+}
+
+@keyframes tf-sheet-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.tf-sheet__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  padding-top: var(--sp-2);
+}
+
+.tf-sheet__rule {
+  flex: 1;
+  height: 1px;
+  background: var(--border-hairline);
+}
+
+.tf-sheet__nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  padding-block: var(--sp-6);
+}
+
+.tf-sheet__nav a {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 24px 1fr auto;
+  align-items: center;
+  gap: var(--sp-5);
+  min-height: 64px;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  border-radius: var(--r-md);
+  color: rgba(245, 246, 247, 0.78);
+  border: 1px solid transparent;
+  opacity: 0;
+  transform: translateX(-12px);
+  animation: tf-sheet-item 0.4s cubic-bezier(0.16, 1, 0.3, 1) var(--d, 0ms) forwards;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+@keyframes tf-sheet-item {
+  to { opacity: 1; transform: none; }
+}
+
+.tf-sheet__nav a .idx {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: var(--ls-label);
+  color: var(--text-muted);
+}
+
+.tf-sheet__nav a .ico {
+  color: var(--text-secondary);
+  font-size: 20px;
+}
+
+.tf-sheet__nav a .lbl {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 6vw, 26px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.tf-sheet__nav a .chev {
+  color: var(--text-muted);
+  font-size: 20px;
+}
+
+.tf-sheet__nav a:active,
+.tf-sheet__nav a.here {
+  background: var(--tf-white-04);
+  border-color: var(--border-hover);
+  color: var(--text-primary);
+}
+
+.tf-sheet__nav a.here .idx,
+.tf-sheet__nav a.here .ico,
+.tf-sheet__nav a.here .chev {
+  color: var(--text-primary);
+}
+
+.tf-sheet__foot {
+  padding-top: var(--sp-5);
+  border-top: 1px solid var(--border-hairline);
+  display: flex;
+  justify-content: center;
+}
+
+.tf-sheet__mark {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.4em;
+  color: var(--accent);
+}
+
+/* Botón volver arriba */
+.tf-to-top {
+  position: fixed;
+  right: clamp(16px, 3vw, 32px);
+  bottom: clamp(16px, 3vw, 32px);
+  z-index: 45;
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--border-hover);
+  background: rgba(5, 7, 10, 0.64);
+  backdrop-filter: blur(10px);
+  color: var(--text-primary);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(14px) scale(0.9);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease, background 0.15s ease, border-color 0.15s ease;
+
+  .material-icons {
+    font-size: 19px;
+  }
+}
+
+.tf-to-top.show {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.tf-to-top:hover {
+  background: var(--surface-inverse);
+  color: var(--text-inverse);
+  border-color: var(--surface-inverse);
+}
+
+.tf-to-top:active {
+  transform: scale(0.94);
+}
+
+main {
+  display: block;
+}
+
+.tf-footer {
+  background: var(--tf-black);
+  color: var(--text-secondary);
+  padding-block: var(--sp-10) var(--sp-5);
+  border-top: 1px solid var(--border-hairline);
+}
+
+.tf-footer__grid {
+  display: grid;
+  grid-template-columns: 1.3fr repeat(3, 1fr);
+  gap: var(--sp-6);
+}
+
+.tf-footer__brand {
+  color: var(--text-primary);
+  margin-bottom: var(--sp-3);
+}
+
+.tf-footer__tagline {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  max-width: 220px;
+}
+
+.tf-footer__col h4 {
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-label);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-label);
+  margin-bottom: var(--sp-4);
+  font-weight: 400;
+}
+
+.tf-footer__col ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  font-size: 0.9rem;
+}
+
+.tf-footer__col a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tf-footer__col a:hover {
+  color: var(--text-primary);
+}
+
+.tf-footer__bottom {
+  margin-top: var(--sp-8);
+  padding-top: var(--sp-5);
+  border-top: 1px solid var(--border-hairline);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+@media (max-width: 860px) {
+  .tf-footer__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-6) var(--sp-5);
+  }
+}
+
+@media (max-width: 768px) {
+  .tf-header__nav {
+    display: none;
+  }
+
+  .tf-header__toggle {
+    display: flex;
+  }
+
+  .tf-footer__grid {
+    grid-template-columns: 1fr;
+    gap: var(--sp-6);
+    text-align: center;
+  }
+
+  .tf-footer__brand {
+    justify-content: center;
+  }
+
+  .tf-footer__tagline {
+    margin-inline: auto;
+  }
+
+  .tf-footer__col ul {
+    align-items: center;
+  }
+
+  .tf-footer__bottom {
+    text-align: center;
+  }
+}

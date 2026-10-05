@@ -1,0 +1,747 @@
+@use '@angular/material/prebuilt-themes/indigo-pink.css';
+
+:root {
+  /* Neutrales — el sitio es predominantemente oscuro, igual que el resto
+     de la identidad de la casa (ver proyecto ZELYON). */
+  --tf-black: #05070a;
+  --tf-near-black: #0a0d12;
+  --tf-surface: #12161d;
+  --tf-surface-raised: #171c25;
+  --tf-border: #1f242e;
+  --tf-border-strong: #2c3340;
+  --tf-grey-700: #5b6270;
+  --tf-grey-500: #8a92a1;
+  --tf-grey-300: #c5cad3;
+  --tf-white: #f5f6f7;
+  --tf-pure-white: #ffffff;
+
+  /* Acento — tecnología, nunca dominante. */
+  --tf-blue: #3b82f6;
+  --tf-blue-bright: #60a5fa;
+  --tf-blue-deep: #1d4ed8;
+  --tf-blue-08: rgba(59, 130, 246, 0.08);
+  --tf-blue-16: rgba(59, 130, 246, 0.16);
+  --tf-blue-32: rgba(59, 130, 246, 0.32);
+
+  --tf-success: #3fb98a;
+  --tf-warning: #e0a83b;
+  --tf-danger: #e2564f;
+
+  --tf-white-04: rgba(245, 246, 247, 0.04);
+  --tf-white-08: rgba(245, 246, 247, 0.08);
+  --tf-white-12: rgba(245, 246, 247, 0.12);
+
+  --bg-page: var(--tf-black);
+  --bg-section: var(--tf-near-black);
+  --surface-card: var(--tf-surface);
+  --surface-raised: var(--tf-surface-raised);
+  --surface-inverse: var(--tf-white);
+
+  --border-hairline: var(--tf-border);
+  --border-hover: var(--tf-border-strong);
+
+  --text-primary: var(--tf-white);
+  --text-secondary: var(--tf-grey-500);
+  --text-muted: var(--tf-grey-700);
+  --text-inverse: var(--tf-black);
+
+  --accent: var(--tf-blue);
+  --accent-hover: var(--tf-blue-bright);
+
+  /* Tipografía */
+  --font-display: 'Bricolage Grotesque', 'Helvetica Neue', Arial, sans-serif;
+  --font-display-hero: 'Bungee', 'Bricolage Grotesque', 'Helvetica Neue', Arial, sans-serif;
+  --font-body: 'Bricolage Grotesque', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'Space Mono', ui-monospace, SFMono-Regular, monospace;
+
+  --fw-regular: 400;
+  --fw-medium: 600;
+  --fw-semibold: 700;
+  --fw-bold: 800;
+
+  --fs-display-1: clamp(3.25rem, 8vw, 6rem);
+  --fs-display-2: clamp(2.5rem, 5vw, 3.75rem);
+  --fs-display-3: clamp(1.85rem, 3.2vw, 2.6rem);
+  --fs-h3: 1.25rem;
+  --fs-body-lg: 1.15rem;
+  --fs-body: 1rem;
+  --fs-body-sm: 0.92rem;
+  --fs-caption: 0.8rem;
+  --fs-mono-label: 0.72rem;
+
+  --lh-display: 1;
+  --lh-heading: 1.14;
+  --lh-body: 1.62;
+
+  --ls-display: -0.026em;
+  --ls-heading: -0.016em;
+  --ls-label: 0.12em;
+
+  /* Radios */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 16px;
+  --r-xl: 24px;
+  --r-pill: 999px;
+
+  /* Espaciado */
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-8: 56px;
+  --sp-10: 88px;
+  --sp-12: 176px;
+
+  --section-y: var(--sp-12);
+  --section-y-tight: var(--sp-10);
+  --gutter: clamp(20px, 5vw, 64px);
+  --container-max: 1180px;
+
+  --shadow-lift: 0 16px 40px -18px rgba(0, 0, 0, 0.6);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Compensa el header sticky al saltar a un ancla (#servicios, #proceso,
+   etc.) para que la sección no quede tapada. */
+#servicios,
+#proceso,
+#contacto,
+#folio,
+#promociones {
+  scroll-margin-top: 72px;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--text-primary);
+  background: var(--bg-page);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-heading);
+  line-height: var(--lh-heading);
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: var(--tf-blue-32);
+  color: var(--tf-pure-white);
+}
+
+.tf-container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.tf-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.tf-eyebrow .idx {
+  color: var(--accent);
+}
+
+.tf-eyebrow .rule {
+  width: 24px;
+  height: 1px;
+  background: var(--border-hover);
+}
+
+.tf-section-header {
+  max-width: 680px;
+  margin-bottom: var(--sp-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.tf-section-header h2 {
+  font-size: var(--fs-display-3);
+  letter-spacing: var(--ls-display);
+  color: var(--text-primary);
+  text-wrap: pretty;
+}
+
+.tf-section-header p {
+  font-size: var(--fs-body-lg);
+  color: var(--text-secondary);
+  max-width: 620px;
+}
+
+.tf-section {
+  padding-block: var(--section-y-tight);
+  border-top: 1px solid var(--border-hairline);
+}
+
+/* Botones */
+.tf-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  height: 52px;
+  padding-inline: 1.75rem;
+  font-family: var(--font-body);
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-body-sm);
+  letter-spacing: -0.005em;
+  border-radius: var(--r-pill);
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.tf-btn:active {
+  transform: translateY(0) scale(0.985);
+}
+
+.tf-btn--primary {
+  background: var(--surface-inverse);
+  color: var(--text-inverse);
+  border-color: var(--surface-inverse);
+}
+
+.tf-btn--primary:hover {
+  background: var(--tf-pure-white);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lift);
+}
+
+.tf-btn--outline {
+  background: transparent;
+  color: var(--text-primary);
+  border-color: var(--border-hairline);
+}
+
+.tf-btn--outline:hover {
+  background: var(--tf-white-04);
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+}
+
+.tf-btn--sm {
+  height: 40px;
+  padding-inline: 1.15rem;
+  font-size: var(--fs-caption);
+}
+
+/* Reveal-on-scroll: se activa con TfRevealDirective */
+.tf-reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 480ms cubic-bezier(0.16, 1, 0.3, 1), transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.tf-reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tf-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Cascada: hijos directos de .tf-stagger entran con delay creciente
+   cuando el propio contenedor recibe .tf-reveal.is-in (ver reveal.directive.ts). */
+.tf-stagger > * {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 480ms cubic-bezier(0.16, 1, 0.3, 1), transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tf-stagger.is-in > *:nth-child(1) { transition-delay: 40ms; }
+.tf-stagger.is-in > *:nth-child(2) { transition-delay: 100ms; }
+.tf-stagger.is-in > *:nth-child(3) { transition-delay: 160ms; }
+.tf-stagger.is-in > *:nth-child(4) { transition-delay: 220ms; }
+.tf-stagger.is-in > *:nth-child(5) { transition-delay: 280ms; }
+.tf-stagger.is-in > *:nth-child(6) { transition-delay: 340ms; }
+.tf-stagger.is-in > * { opacity: 1; transform: none; }
+.tf-stagger:not(.is-in) > * { opacity: 0; transform: translateY(16px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .tf-stagger > * {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Promo band: ticker horizontal en loop */
+.tf-marquee {
+  overflow: hidden;
+  background: var(--tf-white);
+  border-bottom: 1px solid var(--border-hairline);
+}
+
+.tf-marquee__track {
+  display: flex;
+  width: max-content;
+  animation: tf-marquee-scroll 26s linear infinite;
+}
+
+.tf-marquee__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 2rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-inverse);
+  white-space: nowrap;
+}
+
+.tf-marquee__item .dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--tf-blue-deep);
+}
+
+@keyframes tf-marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tf-marquee__track {
+    animation: none;
+  }
+}
+
+/* ───────── Panel admin: utilidades compartidas por clientes/equipos/
+   órdenes/técnicos, para no repetir la misma tabla y el mismo form 4 veces. */
+
+.tf-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  margin-bottom: 0.5rem;
+
+  .material-icons {
+    font-size: 16px;
+  }
+}
+
+.tf-back-link:hover {
+  color: var(--text-primary);
+}
+
+.tf-detail-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.tf-page-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-6);
+}
+
+.tf-page-head h1 {
+  font-size: 1.5rem;
+  color: var(--text-primary);
+}
+
+.tf-page-head p {
+  margin-top: 0.35rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.tf-panel {
+  background: var(--surface-card);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--r-lg);
+  padding: var(--sp-5);
+  margin-bottom: var(--sp-5);
+}
+
+.tf-panel h2 {
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-4);
+}
+
+.tf-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.tf-field label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.tf-field input,
+.tf-field select,
+.tf-field textarea {
+  padding: 0.65rem 0.8rem;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border-hairline);
+  background: var(--bg-page);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+}
+
+.tf-field input:focus,
+.tf-field select:focus,
+.tf-field textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--tf-blue-16);
+}
+
+.tf-field textarea {
+  resize: vertical;
+  min-height: 70px;
+  font-family: var(--font-body);
+}
+
+.tf-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--sp-4);
+}
+
+.tf-form-actions {
+  display: flex;
+  gap: var(--sp-3);
+  margin-top: var(--sp-5);
+}
+
+.tf-table-wrap {
+  background: var(--surface-card);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  overflow-x: auto;
+}
+
+.tf-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.tf-table th {
+  text-align: left;
+  padding: 0.85rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-hairline);
+  white-space: nowrap;
+}
+
+.tf-table td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--border-hairline);
+  color: var(--text-secondary);
+  vertical-align: middle;
+}
+
+.tf-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tf-table tbody tr:hover {
+  background: var(--tf-white-04);
+}
+
+.tf-table td.is-strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.tf-row-actions {
+  display: flex;
+  gap: 0.4rem;
+  justify-content: flex-end;
+}
+
+.tf-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border-hairline);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+
+  .material-icons {
+    font-size: 17px;
+  }
+}
+
+.tf-icon-btn:hover {
+  background: var(--tf-white-04);
+  color: var(--text-primary);
+  border-color: var(--border-hover);
+}
+
+.tf-icon-btn--danger:hover {
+  color: #f28b85;
+  border-color: #f28b85;
+}
+
+.tf-empty {
+  padding: var(--sp-8);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.tf-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--r-pill);
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  background: var(--tf-white-08);
+  color: var(--text-secondary);
+}
+
+.tf-badge .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.tf-badge--recibido { color: var(--tf-grey-300); }
+.tf-badge--diagnostico { color: var(--accent-hover); }
+.tf-badge--esperando_autorizacion { color: var(--tf-warning); }
+.tf-badge--en_reparacion { color: var(--tf-blue-bright); }
+.tf-badge--listo { color: var(--tf-success); }
+.tf-badge--entregado { color: var(--tf-grey-500); }
+
+.tf-stat-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-6);
+}
+
+.tf-stat-card {
+  background: var(--surface-card);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--r-lg);
+  padding: var(--sp-5);
+}
+
+.tf-stat-card .n {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.9rem;
+  color: var(--text-primary);
+}
+
+.tf-stat-card .l {
+  display: block;
+  margin-top: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Los badges de estado dentro de una stat card pueden llevar textos largos
+   ("Esperando autorización"); el nowrap de .tf-badge está pensado para
+   tablas angostas, no para tarjetas de ~180px — ahí se dejaba cortar. */
+.tf-stat-card .tf-badge {
+  white-space: normal;
+  text-align: left;
+}
+
+.tf-btn--outline-sm {
+  height: 40px;
+  padding-inline: 1.15rem;
+  font-size: 0.85rem;
+}
+
+.tf-inline-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.4rem;
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--accent-hover);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  .material-icons {
+    font-size: 16px;
+  }
+}
+
+.tf-inline-link:hover {
+  color: var(--tf-white);
+}
+
+.tf-btn--danger {
+  background: var(--tf-danger);
+  color: var(--tf-white);
+  border-color: var(--tf-danger);
+}
+
+.tf-btn--danger:hover {
+  background: #c8433c;
+  border-color: #c8433c;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lift);
+}
+
+/* Modal compartido para los formularios de alta/edición del panel
+   (clientes, equipos, técnicos, órdenes) — antes eran paneles inline que
+   empujaban el resto de la página hacia abajo. */
+.tf-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: var(--sp-6) var(--sp-5);
+  background: rgba(5, 7, 10, 0.78);
+  backdrop-filter: blur(6px);
+  overflow-y: auto;
+  animation: tf-modal-in 0.2s ease both;
+}
+
+@keyframes tf-modal-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.tf-modal-panel {
+  position: relative;
+  width: min(640px, 100%);
+  background: var(--surface-card);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--r-lg);
+  padding: var(--sp-6);
+  margin: auto;
+}
+
+.tf-modal-panel h2 {
+  font-size: 1.15rem;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-5);
+  padding-right: var(--sp-6);
+}
+
+.tf-modal-close {
+  position: absolute;
+  top: var(--sp-4);
+  right: var(--sp-4);
+  z-index: 1;
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--border-hairline);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+
+  .material-icons {
+    font-size: 18px;
+  }
+}
+
+.tf-modal-close:hover {
+  background: var(--tf-white-04);
+  color: var(--text-primary);
+}
+
+@media (max-width: 640px) {
+  .tf-modal-overlay {
+    padding: var(--sp-4);
+  }
+}

@@ -1,0 +1,172 @@
+<div class="tf-page-head">
+  <div>
+    <h1>Equipos</h1>
+    <p>Equipos recibidos, ligados a un cliente.</p>
+  </div>
+  <button type="button" class="tf-btn tf-btn--primary tf-btn--sm" (click)="abrirNuevo()">
+    <span class="material-icons">add</span>
+    Nuevo equipo
+  </button>
+</div>
+
+@if (mostrarForm()) {
+  <div class="tf-modal-overlay" (click)="cancelar()">
+    <div class="tf-modal-panel" (click)="$event.stopPropagation()">
+      <button type="button" class="tf-modal-close" (click)="cancelar()" aria-label="Cerrar">
+        <span class="material-icons">close</span>
+      </button>
+
+      <h2>{{ editandoId ? 'Editar equipo' : 'Nuevo equipo' }}</h2>
+
+    <div class="tf-form-grid">
+      @if (!editandoId) {
+        <div class="tf-field">
+          <label for="cliente">Cliente</label>
+          <select id="cliente" [(ngModel)]="form.clienteId">
+            <option [ngValue]="null">Selecciona un cliente…</option>
+            @for (cliente of clientes(); track cliente.id) {
+              <option [ngValue]="cliente.id">{{ cliente.nombre_completo }}</option>
+            }
+          </select>
+        </div>
+      }
+
+      <div class="tf-field">
+        <label for="tipo">Tipo</label>
+        <select id="tipo" [(ngModel)]="form.tipo">
+          @for (tipo of tipos; track tipo) {
+            <option [value]="tipo">{{ tipo }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="tf-field">
+        <label for="marca">Marca</label>
+        <input id="marca" type="text" [(ngModel)]="form.marca" />
+      </div>
+
+      <div class="tf-field">
+        <label for="modelo">Modelo</label>
+        <input id="modelo" type="text" [(ngModel)]="form.modelo" />
+      </div>
+
+      <div class="tf-field">
+        <label for="numero_serie">Número de serie</label>
+        <input id="numero_serie" type="text" [(ngModel)]="form.numero_serie" />
+      </div>
+
+      <div class="tf-field">
+        <label for="color">Color</label>
+        <input id="color" type="text" [(ngModel)]="form.color" />
+      </div>
+
+      <div class="tf-field" style="grid-column: 1 / -1;">
+        <label for="estado_fisico">Estado físico</label>
+        <input id="estado_fisico" type="text" [(ngModel)]="form.estado_fisico" />
+      </div>
+
+      <div class="tf-field" style="grid-column: 1 / -1;">
+        <label for="accesorios">Accesorios recibidos</label>
+        <input id="accesorios" type="text" [(ngModel)]="form.accesorios_recibidos" />
+      </div>
+
+      @if (esMovil) {
+        <div class="tf-field">
+          <label for="imei1">IMEI 1</label>
+          <input id="imei1" type="text" [(ngModel)]="form.imei_1" />
+        </div>
+        <div class="tf-field">
+          <label for="imei2">IMEI 2</label>
+          <input id="imei2" type="text" [(ngModel)]="form.imei_2" />
+        </div>
+        <div class="tf-field">
+          <label for="pantalla">Estado de pantalla</label>
+          <input id="pantalla" type="text" [(ngModel)]="form.estado_pantalla" />
+        </div>
+        <div class="tf-field">
+          <label for="carcasa">Estado de carcasa</label>
+          <input id="carcasa" type="text" [(ngModel)]="form.estado_carcasa" />
+        </div>
+        <div class="tf-field">
+          <label for="camaras">Estado de cámaras</label>
+          <input id="camaras" type="text" [(ngModel)]="form.estado_camaras" />
+        </div>
+        <div class="tf-field">
+          <label for="botones">Estado de botones</label>
+          <input id="botones" type="text" [(ngModel)]="form.estado_botones" />
+        </div>
+        <div class="tf-field">
+          <label for="centro_carga">Estado del centro de carga</label>
+          <input id="centro_carga" type="text" [(ngModel)]="form.estado_centro_carga" />
+        </div>
+        <div class="tf-field">
+          <label for="bateria">Nivel de batería (%)</label>
+          <input id="bateria" type="number" min="0" max="100" [(ngModel)]="form.nivel_bateria" />
+        </div>
+      }
+
+      <div class="tf-field" style="grid-column: 1 / -1;">
+        <label for="observaciones">Observaciones</label>
+        <textarea id="observaciones" [(ngModel)]="form.observaciones"></textarea>
+      </div>
+    </div>
+
+    @if (error()) {
+      <p style="color:#f28b85; font-size:0.85rem; margin-top: 1rem;">{{ error() }}</p>
+    }
+
+    <div class="tf-form-actions">
+      <button type="button" class="tf-btn tf-btn--primary" [disabled]="guardando()" (click)="guardar()">
+        {{ guardando() ? 'Guardando…' : 'Guardar' }}
+      </button>
+      <button type="button" class="tf-btn tf-btn--outline" (click)="cancelar()">Cancelar</button>
+    </div>
+    </div>
+  </div>
+}
+
+<div class="tf-table-wrap">
+  <table class="tf-table">
+    <thead>
+      <tr>
+        <th>Equipo</th>
+        <th>Tipo</th>
+        <th>Cliente</th>
+        <th>Serie / IMEI</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (equipo of equipos(); track equipo.documentId) {
+        <tr>
+          <td class="is-strong">{{ equipo.marca }} {{ equipo.modelo }}</td>
+          <td>{{ equipo.tipo }}</td>
+          <td>{{ equipo.cliente?.nombre_completo || '—' }}</td>
+          <td>{{ equipo.numero_serie || equipo.imei_1 || '—' }}</td>
+          <td>
+            <div class="tf-row-actions">
+              <button type="button" class="tf-icon-btn" (click)="editar(equipo)" aria-label="Editar">
+                <span class="material-icons">edit</span>
+              </button>
+              <button
+                type="button"
+                class="tf-icon-btn tf-icon-btn--danger"
+                (click)="eliminar(equipo)"
+                aria-label="Eliminar"
+              >
+                <span class="material-icons">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  @if (!cargando() && equipos().length === 0) {
+    <div class="tf-empty">No hay equipos registrados todavía.</div>
+  }
+  @if (cargando()) {
+    <div class="tf-empty">Cargando…</div>
+  }
+</div>

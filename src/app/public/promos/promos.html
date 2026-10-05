@@ -1,0 +1,58 @@
+<section id="promociones" class="tf-section tf-promos">
+  <div class="tf-container">
+    <div class="tf-section-header">
+      <span class="tf-eyebrow"><span class="idx">03</span><span class="rule"></span>Promociones</span>
+      <h2>Lo que ofrecemos siempre.</h2>
+    </div>
+
+    <div
+      class="tf-promos-stage"
+      (pointerenter)="pausar()"
+      (pointerleave)="reanudar()"
+      (pointerdown)="onPointerDown($event)"
+      (pointerup)="onPointerUp($event)"
+    >
+      <div class="tf-promos-track" [style.transform]="'translateX(' + -indice() * 100 + '%)'">
+        @for (promo of promos; track promo.titulo) {
+          <article class="tf-promo">
+            <div class="tf-promo__visual">
+              <img [src]="promo.imagen" [alt]="promo.titulo + ' ' + promo.acento" loading="lazy" />
+              <span class="tf-promo__badge">{{ promo.badge }}</span>
+            </div>
+            <div class="tf-promo__detail">
+              <span class="tf-eyebrow">{{ promo.tag }}</span>
+              <h3>{{ promo.titulo }} <em>{{ promo.acento }}</em></h3>
+              <p>{{ promo.descripcion }}</p>
+              <a routerLink="/" fragment="contacto" class="tf-btn tf-btn--primary tf-btn--sm">
+                Contactar
+                <span class="material-icons">north_east</span>
+              </a>
+            </div>
+          </article>
+        }
+      </div>
+
+      @if (promos.length > 1) {
+        <button type="button" class="tf-promos-nav prev" (click)="ir(-1)" aria-label="Promoción anterior">
+          <span class="material-icons">chevron_left</span>
+        </button>
+        <button type="button" class="tf-promos-nav next" (click)="ir(1)" aria-label="Siguiente promoción">
+          <span class="material-icons">chevron_right</span>
+        </button>
+      }
+    </div>
+
+    @if (promos.length > 1) {
+      <div class="tf-promos-dots">
+        @for (promo of promos; track promo.titulo; let i = $index) {
+          <button
+            type="button"
+            [class.on]="i === indice()"
+            (click)="irA(i)"
+            [attr.aria-label]="'Ir a la promoción ' + (i + 1)"
+          ></button>
+        }
+      </div>
+    }
+  </div>
+</section>

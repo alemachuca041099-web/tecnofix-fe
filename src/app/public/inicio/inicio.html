@@ -1,0 +1,258 @@
+<section class="tf-hero">
+  <span class="tf-hero__eyebrow-top tf-eyebrow" tfReveal>Servicio técnico profesional</span>
+  <h1 class="tf-hero__bigmark" tfReveal [tfRevealDelay]="60">TECNOFIX</h1>
+
+  <div class="tf-hero__obj-wrap" aria-hidden="true">
+    <img
+      class="tf-hero__object"
+      src="img/hero-laptop.png"
+      alt=""
+      [style.--tf-par.px]="heroParallax()"
+    />
+  </div>
+
+  <div class="tf-container tf-hero__lower">
+    <div class="tf-hero__col-left" tfReveal [tfRevealDelay]="220">
+      <span class="tf-hero__rule"></span>
+      <h2>Soluciones tecnológicas que funcionan.</h2>
+      <p>
+        Reparamos, damos mantenimiento e instalamos equipos de cómputo, celulares, tablets,
+        impresoras, redes y cámaras de vigilancia.
+      </p>
+      <div class="tf-hero__actions">
+        <a routerLink="/" fragment="contacto" class="tf-btn tf-btn--primary">Solicitar servicio</a>
+        <a routerLink="/consulta-folio" class="tf-btn tf-btn--outline">Consultar mi servicio</a>
+      </div>
+    </div>
+
+    <div class="tf-hero__col-right" tfReveal [tfRevealDelay]="280">
+      <ul class="tf-hero__feats">
+        <li><span>Diagnóstico sin costo</span><span class="material-icons">bolt</span></li>
+        <li><span>Folio de seguimiento</span><span class="material-icons">confirmation_number</span></li>
+        <li><span>Garantía por escrito</span><span class="material-icons">verified</span></li>
+      </ul>
+      <div class="tf-hero__stat">
+        <span class="n">6</span>
+        <span class="l">Categorías<br />de servicio</span>
+      </div>
+    </div>
+  </div>
+
+  <a routerLink="/" fragment="servicios" class="tf-hero__scroll">
+    <span class="material-icons">mouse</span>
+    <span class="tf-eyebrow">Desliza para explorar</span>
+  </a>
+</section>
+
+<div class="tf-marquee tf-marquee--marcas" aria-hidden="true">
+  <div class="tf-marquee__track">
+    @for (i of [0, 1]; track i) {
+      @for (marca of marcas; track marca) {
+        <span class="tf-marquee__item">{{ marca }}</span>
+      }
+    }
+  </div>
+</div>
+
+<section class="tf-section tf-intro">
+  <div class="tf-container tf-intro__grid">
+    <h2 tfReveal>Más que un taller: un equipo de soporte tecnológico para tu día a día.</h2>
+    <div class="tf-intro__body" tfReveal [tfRevealDelay]="80">
+      <p>
+        TecnoFix nace para resolver lo que casi todos enfrentamos tarde o temprano: una laptop
+        que ya no enciende, un celular con la pantalla rota, una red que no llega a todos lados
+        en casa o en el negocio. Atendemos cómputo, celulares, tablets, impresoras, redes y
+        cámaras — con el mismo proceso claro y ordenado para todos.
+      </p>
+      <a routerLink="/nosotros" class="tf-intro__link">
+        Conoce cómo trabajamos
+        <span class="material-icons">north_east</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="servicios" class="tf-section">
+  <div class="tf-container">
+    <div class="tf-section-header" tfReveal>
+      <span class="tf-eyebrow"><span class="idx">02</span><span class="rule"></span>Qué reparamos</span>
+      <h2>Servicios</h2>
+      <p>
+        Del diagnóstico al mantenimiento preventivo: cubrimos los equipos que usas todos los
+        días, en casa y en el negocio.
+      </p>
+    </div>
+
+    <div
+      class="tf-servicios-grid tf-stagger"
+      tfReveal
+      #serviciosScroll
+      (scroll)="onServiciosScroll(serviciosScroll)"
+    >
+      @for (servicio of servicios; track servicio.titulo) {
+        <button type="button" class="tf-servicio-card" (click)="abrirServicio(servicio)">
+          <div class="tf-servicio-card__foto">
+            <img [src]="servicio.imagen" [alt]="servicio.titulo" loading="lazy" />
+            <span class="tf-servicio-card__numero">{{ servicio.numero }}</span>
+          </div>
+          <div class="tf-servicio-card__body">
+            <span class="material-icons tf-servicio-card__icon">{{ servicio.icono }}</span>
+            <h3>{{ servicio.titulo }}</h3>
+            <p class="tf-servicio-card__resumen">{{ servicio.resumen }}</p>
+            <span class="tf-servicio-card__link">Ver detalle<span class="material-icons">north_east</span></span>
+          </div>
+        </button>
+      }
+    </div>
+
+    <div class="tf-servicios-dots">
+      @for (servicio of servicios; track servicio.titulo; let i = $index) {
+        <button
+          type="button"
+          [class.on]="i === servicioActivo()"
+          (click)="irAServicio(serviciosScroll, i)"
+          [attr.aria-label]="'Ir a ' + servicio.titulo"
+        ></button>
+      }
+    </div>
+  </div>
+</section>
+
+@if (servicioSeleccionado(); as s) {
+  <div class="tf-servicio-modal" (click)="cerrarServicio()">
+    <div class="tf-servicio-modal__panel" (click)="$event.stopPropagation()">
+      <button type="button" class="tf-servicio-modal__close" (click)="cerrarServicio()" aria-label="Cerrar">
+        <span class="material-icons">close</span>
+      </button>
+
+      <div class="tf-servicio-modal__foto">
+        <img [src]="s.imagen" [alt]="s.titulo" />
+      </div>
+
+      <div class="tf-servicio-modal__body">
+        <span class="tf-eyebrow"><span class="idx">{{ s.numero }}</span><span class="rule"></span>Servicio</span>
+        <h3>{{ s.titulo }}</h3>
+        <p>{{ s.resumen }}</p>
+
+        <ul>
+          @for (item of s.items; track item) {
+            <li>{{ item }}</li>
+          }
+        </ul>
+
+        <a routerLink="/" fragment="contacto" class="tf-btn tf-btn--primary" (click)="cerrarServicio()">
+          Solicitar este servicio
+          <span class="material-icons">north_east</span>
+        </a>
+      </div>
+    </div>
+  </div>
+}
+
+<tf-promos />
+
+<section id="proceso" class="tf-section">
+  <div class="tf-container">
+    <div class="tf-section-header" tfReveal>
+      <span class="tf-eyebrow"><span class="idx">04</span><span class="rule"></span>Cómo trabajamos</span>
+      <h2>Proceso de servicio</h2>
+      <p>Transparente de principio a fin: sabes qué está pasando con tu equipo en cada etapa.</p>
+    </div>
+
+    <ol
+      class="tf-proceso-grid tf-stagger"
+      tfReveal
+      #procesoScroll
+      (scroll)="onProcesoScroll(procesoScroll)"
+    >
+      @for (paso of proceso; track paso.numero) {
+        <li class="tf-proceso-step">
+          <span class="tf-proceso-step__numero">{{ paso.numero }}</span>
+          <h3>{{ paso.titulo }}</h3>
+          <p>{{ paso.descripcion }}</p>
+        </li>
+      }
+    </ol>
+
+    <div class="tf-servicios-dots tf-proceso-dots">
+      @for (paso of proceso; track paso.numero; let i = $index) {
+        <button
+          type="button"
+          [class.on]="i === pasoActivo()"
+          (click)="irAPaso(procesoScroll, i)"
+          [attr.aria-label]="'Ir al paso ' + paso.titulo"
+        ></button>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="tf-section">
+  <div class="tf-container">
+    <div class="tf-section-header" tfReveal>
+      <span class="tf-eyebrow"><span class="idx">05</span><span class="rule"></span>Por qué TecnoFix</span>
+      <h2>Confianza, tecnología y orden en cada servicio.</h2>
+    </div>
+
+    <div class="tf-razones-grid tf-stagger" tfReveal>
+      @for (razon of razones; track razon.titulo) {
+        <article class="tf-razon-card">
+          <span class="material-icons tf-razon-card__icon">{{ razon.icono }}</span>
+          <h3>{{ razon.titulo }}</h3>
+          <p>{{ razon.descripcion }}</p>
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
+<section id="folio" class="tf-section tf-folio-band">
+  <div class="tf-container tf-folio-band__inner" tfReveal>
+    <div>
+      <span class="tf-eyebrow"><span class="idx">06</span><span class="rule"></span>Tu servicio</span>
+      <h2>¿Ya nos dejaste tu equipo?</h2>
+      <p>Consulta el estado de tu reparación con tu folio y tu teléfono registrado.</p>
+    </div>
+    <a routerLink="/consulta-folio" class="tf-btn tf-btn--primary">
+      Consultar mi folio
+      <span class="material-icons">north_east</span>
+    </a>
+  </div>
+</section>
+
+<section id="contacto" class="tf-section">
+  <div class="tf-container">
+    <div class="tf-section-header" tfReveal>
+      <span class="tf-eyebrow"><span class="idx">07</span><span class="rule"></span>Hablemos</span>
+      <h2>Contacto</h2>
+      <p>
+        Cuéntanos qué le pasa a tu equipo y te decimos cómo seguimos. También puedes traerlo
+        directamente a recepción.
+      </p>
+    </div>
+
+    <div class="tf-contacto-grid tf-stagger" tfReveal>
+      <div class="tf-contacto-item">
+        <span class="material-icons">call</span>
+        <div>
+          <h4>Teléfono / WhatsApp</h4>
+          <p><a href="tel:+524273719797">427 371 9797</a></p>
+        </div>
+      </div>
+      <div class="tf-contacto-item">
+        <span class="material-icons">mail</span>
+        <div>
+          <h4>Correo</h4>
+          <p><a href="mailto:alexwork049910@gmail.com">alexwork049910&#64;gmail.com</a></p>
+        </div>
+      </div>
+      <div class="tf-contacto-item">
+        <span class="material-icons">schedule</span>
+        <div>
+          <h4>Horario</h4>
+          <p>Lunes a sábado, 9:00–19:00</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

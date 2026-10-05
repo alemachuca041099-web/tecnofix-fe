@@ -1,0 +1,115 @@
+<div class="tf-page-head">
+  <div>
+    <h1>Reportes</h1>
+    <p>Resumen de operación por periodo.</p>
+  </div>
+  <a routerLink="/admin/ordenes" class="tf-btn tf-btn--outline tf-btn--sm">
+    Ver órdenes
+    <span class="material-icons">north_east</span>
+  </a>
+</div>
+
+<div class="tf-panel tf-reportes-filtro">
+  <div class="tf-field">
+    <label for="desde">Desde</label>
+    <input id="desde" type="date" [(ngModel)]="desde" (ngModelChange)="cargar()" />
+  </div>
+  <div class="tf-field">
+    <label for="hasta">Hasta</label>
+    <input id="hasta" type="date" [(ngModel)]="hasta" (ngModelChange)="cargar()" />
+  </div>
+</div>
+
+@if (cargando()) {
+  <div class="tf-empty">Cargando…</div>
+} @else {
+  <div class="tf-stat-cards">
+    <div class="tf-stat-card">
+      <span class="n">{{ totalOrdenes() }}</span>
+      <span class="l">Órdenes en el periodo</span>
+    </div>
+    <div class="tf-stat-card">
+      <span class="n">{{ entregadas() }}</span>
+      <span class="l">Entregadas</span>
+    </div>
+    <div class="tf-stat-card">
+      <span class="n">{{ ingresosTotales() | currency: 'MXN' : 'symbol-narrow' : '1.0-0' }}</span>
+      <span class="l">Ingresos (entregadas)</span>
+    </div>
+    <div class="tf-stat-card">
+      <span class="n">{{ ticketPromedio() | currency: 'MXN' : 'symbol-narrow' : '1.0-0' }}</span>
+      <span class="l">Ticket promedio</span>
+    </div>
+  </div>
+
+  <div class="tf-reportes-grid">
+    <div class="tf-panel">
+      <h2>Órdenes por estado</h2>
+      <div class="tf-reportes-barras">
+        @for (item of conteoPorEstado(); track item.valor) {
+          <div class="tf-reportes-barra-fila">
+            <span class="tf-badge" [class]="'tf-badge--' + item.valor">
+              <span class="dot"></span>{{ item.etiqueta }}
+            </span>
+            <span class="tf-reportes-barra-num">{{ item.total }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="tf-panel">
+      <h2>Por tipo de equipo</h2>
+      <div class="tf-reportes-barras">
+        @for (item of conteoPorTipoEquipo(); track item.tipo) {
+          <div class="tf-reportes-barra-fila">
+            <span class="tf-reportes-barra-label">{{ item.tipo }}</span>
+            <div class="tf-reportes-barra-track">
+              <div class="tf-reportes-barra-fill" [style.width.%]="(item.total / maxPorTipoEquipo()) * 100"></div>
+            </div>
+            <span class="tf-reportes-barra-num">{{ item.total }}</span>
+          </div>
+        } @empty {
+          <div class="tf-empty">Sin órdenes en este periodo.</div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="tf-panel">
+    <h2>Órdenes del periodo</h2>
+    <div class="tf-table-wrap" style="border: none;">
+      <table class="tf-table">
+        <thead>
+          <tr>
+            <th>Folio</th>
+            <th>Cliente</th>
+            <th>Equipo</th>
+            <th>Estado</th>
+            <th>Costo</th>
+            <th>Recepción</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (orden of ordenes(); track orden.documentId) {
+            <tr>
+              <td class="is-strong">{{ orden.folio }}</td>
+              <td>{{ orden.cliente?.nombre_completo || '—' }}</td>
+              <td>{{ orden.equipo?.tipo }} {{ orden.equipo?.marca }}</td>
+              <td>
+                <span class="tf-badge" [class]="'tf-badge--' + orden.estado">
+                  <span class="dot"></span>{{ etiquetaEstado(orden.estado) }}
+                </span>
+              </td>
+              <td>{{ (orden.costo_estimado | currency: 'MXN' : 'symbol-narrow' : '1.0-0') || '—' }}</td>
+              <td>{{ orden.fecha_recepcion | date: 'd/MM/yyyy' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      @if (ordenes().length === 0) {
+        <div class="tf-empty">No hay órdenes en este periodo.</div>
+      }
+    </div>
+  </div>
+}

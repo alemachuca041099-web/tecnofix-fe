@@ -1,0 +1,182 @@
+@if (orden(); as o) {
+  <div class="tf-page-head">
+    <div>
+      <a routerLink="/admin/ordenes" class="tf-back-link">
+        <span class="material-icons">arrow_back</span>
+        Órdenes
+      </a>
+      <h1>{{ o.folio }}</h1>
+      <p>
+        {{ o.cliente?.nombre_completo }} · {{ o.equipo?.tipo }} {{ o.equipo?.marca }} {{ o.equipo?.modelo }}
+      </p>
+    </div>
+    <span class="tf-badge" [class]="'tf-badge--' + o.estado" style="font-size: 0.85rem; padding: 0.5rem 0.9rem;">
+      <span class="dot"></span>
+      {{ form.estado }}
+    </span>
+  </div>
+
+  <div class="tf-od-grid">
+    <div class="tf-od-main">
+      <div class="tf-panel">
+        <h2>Equipo y cliente</h2>
+        <div class="tf-form-grid">
+          <div><span class="tf-detail-label">Cliente</span><p>{{ o.cliente?.nombre_completo }}</p></div>
+          <div><span class="tf-detail-label">Teléfono</span><p>{{ o.cliente?.telefono }}</p></div>
+          <div><span class="tf-detail-label">Equipo</span><p>{{ o.equipo?.tipo }} — {{ o.equipo?.marca }} {{ o.equipo?.modelo }}</p></div>
+          <div><span class="tf-detail-label">Serie / IMEI</span><p>{{ o.equipo?.numero_serie || o.equipo?.imei_1 || '—' }}</p></div>
+          <div style="grid-column: 1 / -1;"><span class="tf-detail-label">Problema reportado</span><p>{{ o.problema_reportado }}</p></div>
+        </div>
+      </div>
+
+      <div class="tf-panel">
+        <h2>Diagnóstico y servicio</h2>
+        <div class="tf-form-grid">
+          <div class="tf-field">
+            <label for="estado">Estado</label>
+            <select id="estado" [(ngModel)]="form.estado">
+              @for (estado of estados; track estado.valor) {
+                <option [value]="estado.valor">{{ estado.etiqueta }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="tf-field">
+            <label for="tecnico">Técnico responsable</label>
+            <select id="tecnico" [(ngModel)]="form.tecnico_responsable">
+              <option [ngValue]="null">TecnoFix (interno, sin asignar)</option>
+              @for (tecnico of tecnicos(); track tecnico.id) {
+                <option [ngValue]="tecnico.id">{{ tecnico.nombre }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="tf-field" style="grid-column: 1 / -1;">
+            <label for="diagnostico">Diagnóstico</label>
+            <textarea id="diagnostico" [(ngModel)]="form.diagnostico"></textarea>
+          </div>
+
+          <div class="tf-field" style="grid-column: 1 / -1;">
+            <label for="servicio">Servicio solicitado</label>
+            <textarea id="servicio" [(ngModel)]="form.servicio_solicitado"></textarea>
+          </div>
+
+          <div class="tf-field" style="grid-column: 1 / -1;">
+            <label for="piezas">Piezas utilizadas</label>
+            <input id="piezas" type="text" [(ngModel)]="form.piezas" />
+          </div>
+        </div>
+      </div>
+
+      <div class="tf-panel">
+        <h2>Costos y garantía</h2>
+        <div class="tf-form-grid">
+          <div class="tf-field">
+            <label for="mano_obra">Mano de obra</label>
+            <input id="mano_obra" type="number" step="0.01" [(ngModel)]="form.mano_obra" />
+          </div>
+          <div class="tf-field">
+            <label for="costo">Costo total</label>
+            <input id="costo" type="number" step="0.01" [(ngModel)]="form.costo_estimado" />
+          </div>
+          <div class="tf-field">
+            <label for="anticipo">Anticipo</label>
+            <input id="anticipo" type="number" step="0.01" [(ngModel)]="form.anticipo" />
+          </div>
+          <div class="tf-field">
+            <label for="saldo">Saldo</label>
+            <input id="saldo" type="number" step="0.01" [(ngModel)]="form.saldo" />
+          </div>
+          <div class="tf-field">
+            <label for="garantia_dias">Garantía (días)</label>
+            <input id="garantia_dias" type="number" [(ngModel)]="form.garantia_dias" />
+          </div>
+          <div class="tf-field" style="grid-column: 1 / -1;">
+            <label for="garantia_condiciones">Condiciones de garantía</label>
+            <input id="garantia_condiciones" type="text" [(ngModel)]="form.garantia_condiciones" />
+          </div>
+          <div class="tf-field" style="grid-column: 1 / -1;">
+            <label for="notas">Notas internas</label>
+            <textarea id="notas" [(ngModel)]="form.notas"></textarea>
+          </div>
+        </div>
+
+        @if (error()) {
+          <p style="color:#f28b85; font-size:0.85rem; margin-top: 1rem;">{{ error() }}</p>
+        }
+
+        <div class="tf-form-actions">
+          <button type="button" class="tf-btn tf-btn--primary" [disabled]="guardando()" (click)="guardar()">
+            {{ guardando() ? 'Guardando…' : 'Guardar cambios' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tf-od-side">
+      <div class="tf-panel">
+        <h2>Documentos</h2>
+        <div class="tf-od-docs">
+          @if (o.pdf_recepcion?.url) {
+            <a [href]="apiOrigin + o.pdf_recepcion!.url" target="_blank" class="tf-btn tf-btn--outline-sm">
+              <span class="material-icons">description</span>
+              Ver PDF de recepción
+            </a>
+          }
+          <button
+            type="button"
+            class="tf-btn tf-btn--outline-sm"
+            [disabled]="generandoPdf() === 'recepcion'"
+            (click)="generarPdfRecepcion()"
+          >
+            {{ generandoPdf() === 'recepcion' ? 'Generando…' : (o.pdf_recepcion?.url ? 'Regenerar PDF de recepción' : 'Generar PDF de recepción') }}
+          </button>
+
+          @if (o.pdf_entrega?.url) {
+            <a [href]="apiOrigin + o.pdf_entrega!.url" target="_blank" class="tf-btn tf-btn--outline-sm">
+              <span class="material-icons">description</span>
+              Ver PDF de entrega
+            </a>
+          }
+          <button
+            type="button"
+            class="tf-btn tf-btn--outline-sm"
+            [disabled]="generandoPdf() === 'entrega' || !puedeGenerarPdfEntrega"
+            (click)="generarPdfEntrega()"
+          >
+            {{ generandoPdf() === 'entrega' ? 'Generando…' : (o.pdf_entrega?.url ? 'Regenerar PDF de entrega' : 'Generar PDF de entrega') }}
+          </button>
+          @if (!puedeGenerarPdfEntrega) {
+            <span style="font-size: 0.78rem; color: var(--text-muted);">
+              Disponible cuando el estado sea "Listo" o "Entregado".
+            </span>
+          }
+        </div>
+      </div>
+
+      <div class="tf-panel">
+        <h2>Historial</h2>
+        <ol class="tf-od-historial">
+          @for (h of o.historial; track h.documentId) {
+            <li>
+              <span class="tf-od-historial__dot"></span>
+              <div>
+                <span class="tf-od-historial__estado">{{ h.estado_nuevo }}</span>
+                <span class="tf-od-historial__fecha">{{ h.fecha_hora | date: 'd/MM/yyyy, HH:mm' }}</span>
+                @if (h.usuario_nombre) {
+                  <span class="tf-od-historial__usuario">por {{ h.usuario_nombre }}</span>
+                }
+              </div>
+            </li>
+          } @empty {
+            <li class="tf-empty">Sin historial todavía.</li>
+          }
+        </ol>
+      </div>
+    </div>
+  </div>
+} @else if (cargando()) {
+  <div class="tf-empty">Cargando…</div>
+} @else {
+  <div class="tf-empty">No se encontró la orden.</div>
+}

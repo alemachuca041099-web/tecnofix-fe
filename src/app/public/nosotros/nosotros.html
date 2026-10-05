@@ -1,0 +1,81 @@
+<section class="tf-nos-hero">
+  <div class="tf-container">
+    <span class="tf-eyebrow" tfReveal><span class="idx">●</span>Quiénes somos</span>
+    <h1 tfReveal [tfRevealDelay]="60">Un equipo de soporte tecnológico, no solo un taller de reparación.</h1>
+    <p tfReveal [tfRevealDelay]="120">
+      TecnoFix ofrece un solo lugar y un solo proceso para todo tu ecosistema de equipos:
+      cómputo, celulares, tablets, impresoras, redes y cámaras.
+    </p>
+  </div>
+</section>
+
+<section class="tf-section">
+  <div class="tf-container tf-nos-mv">
+    <div tfReveal>
+      <span class="tf-eyebrow"><span class="idx">01</span><span class="rule"></span>Lo que buscamos</span>
+      <h2>Misión</h2>
+      <p class="lg">
+        Que nunca te quedes sin saber qué le pasa a tu equipo, cuánto cuesta arreglarlo ni en
+        qué va tu reparación. Servicio técnico ordenado, documentado y con seguimiento real.
+      </p>
+    </div>
+    <div tfReveal [tfRevealDelay]="100">
+      <span class="tf-eyebrow"><span class="idx">02</span><span class="rule"></span>Hacia dónde vamos</span>
+      <h2>Visión</h2>
+      <p class="lg">
+        Ser el soporte tecnológico de referencia para hogares y pequeños negocios: cómputo,
+        celulares, redes y videovigilancia, todo con un mismo estándar de calidad.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="tf-section tf-nos-work">
+  <div class="tf-container tf-nos-work__grid">
+    <figure class="tf-nos-work__figure" tfReveal>
+      <img src="img/about-work.jpg" alt="Banco de trabajo con herramientas y piezas en proceso de revisión" loading="lazy" />
+      <figcaption><span class="dot"></span>Banco de trabajo</figcaption>
+    </figure>
+    <div tfReveal [tfRevealDelay]="100">
+      <span class="tf-eyebrow"><span class="idx">03</span><span class="rule"></span>Cómo trabajamos</span>
+      <h2>Un proceso, no una improvisación.</h2>
+      <div class="tf-nos-work__list">
+        @for (item of formaTrabajo; track item.titulo) {
+          <div class="tf-nos-work__item">
+            <h4>{{ item.titulo }}</h4>
+            <p>{{ item.descripcion }}</p>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="tf-section">
+  <div class="tf-container">
+    <div class="tf-section-header" tfReveal>
+      <span class="tf-eyebrow"><span class="idx">04</span><span class="rule"></span>Principios</span>
+      <h2>Lo que no negociamos.</h2>
+    </div>
+
+    <div class="tf-nos-principios tf-stagger" tfReveal>
+      @for (principio of principios; track principio.titulo; let i = $index) {
+        <article class="tf-nos-principio">
+          <span class="tf-nos-principio__num">{{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }}</span>
+          <h3>{{ principio.titulo }}</h3>
+          <p>{{ principio.descripcion }}</p>
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="tf-section tf-nos-cta">
+  <div class="tf-container tf-nos-cta__inner" tfReveal>
+    <h2>¿Le pasa algo a tu equipo?</h2>
+    <div class="tf-nos-cta__actions">
+      <a routerLink="/" fragment="contacto" class="tf-btn tf-btn--primary">Solicitar servicio</a>
+      <a routerLink="/consulta-folio" class="tf-btn tf-btn--outline">Consultar mi folio</a>
+    </div>
+  </div>
+</section>

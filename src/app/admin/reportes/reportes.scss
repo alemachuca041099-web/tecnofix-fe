@@ -1,0 +1,63 @@
+:host {
+  display: block;
+}
+
+.tf-reportes-filtro {
+  display: flex;
+  gap: var(--sp-5);
+  flex-wrap: wrap;
+}
+
+.tf-reportes-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-5);
+  margin-bottom: var(--sp-5);
+}
+
+.tf-reportes-barras {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.tf-reportes-barra-fila {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.tf-reportes-barra-label {
+  flex: 0 0 90px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.tf-reportes-barra-track {
+  flex: 1;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--tf-white-08);
+  overflow: hidden;
+}
+
+.tf-reportes-barra-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+.tf-reportes-barra-num {
+  flex: 0 0 auto;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  min-width: 1.5rem;
+  text-align: right;
+}
+
+@media (max-width: 900px) {
+  .tf-reportes-grid {
+    grid-template-columns: 1fr;
+  }
+}

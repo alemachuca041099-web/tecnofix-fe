@@ -1,0 +1,125 @@
+<header class="tf-header">
+  <div class="tf-container tf-header__bar">
+    <a routerLink="/" class="tf-header__brand" (click)="cerrarMenu()">
+      <img src="img/logo-icon-square.png" alt="" class="tf-header__mark" />
+      <span class="tf-header__name">TECNOFIX</span>
+    </a>
+
+    <nav class="tf-header__nav">
+      <a routerLink="/" fragment="servicios">Servicios</a>
+      <a routerLink="/nosotros" routerLinkActive="is-active">Nosotros</a>
+      <a routerLink="/" fragment="proceso">Proceso</a>
+      <a routerLink="/" fragment="contacto">Contacto</a>
+      <a routerLink="/consulta-folio" routerLinkActive="is-active" class="tf-header__folio"
+        >Consultar mi servicio</a
+      >
+    </nav>
+
+    <button
+      type="button"
+      class="tf-header__toggle"
+      (click)="alternarMenu()"
+      [attr.aria-expanded]="menuAbierto()"
+      aria-label="Abrir menú"
+    >
+      <span class="material-icons">{{ menuAbierto() ? 'close' : 'menu' }}</span>
+    </button>
+  </div>
+</header>
+
+@if (menuAbierto()) {
+  <div class="tf-sheet">
+    <div class="tf-sheet__meta">
+      <span class="tf-eyebrow">Navegación</span>
+      <span class="tf-sheet__rule"></span>
+    </div>
+
+    <nav class="tf-sheet__nav">
+      @for (enlace of enlaces; track enlace.etiqueta; let i = $index) {
+        <a
+          [routerLink]="enlace.ruta"
+          [fragment]="enlace.fragmento"
+          [routerLinkActive]="enlace.fragmento ? '' : 'here'"
+          [style.--d]="40 + i * 50 + 'ms'"
+          (click)="cerrarMenu()"
+        >
+          <span class="idx">{{ i + 1 < 10 ? '0' + (i + 1) : i + 1 }}</span>
+          <span class="material-icons ico">{{ enlace.icono }}</span>
+          <span class="lbl">{{ enlace.etiqueta }}</span>
+          <span class="material-icons chev">chevron_right</span>
+        </a>
+      }
+    </nav>
+
+    <div class="tf-sheet__foot">
+      <span class="tf-sheet__mark">TECNOFIX</span>
+    </div>
+  </div>
+}
+
+<main>
+  <router-outlet />
+</main>
+
+<div class="tf-marquee" aria-hidden="true">
+  <div class="tf-marquee__track">
+    @for (i of [0, 1]; track i) {
+      <span class="tf-marquee__item"><span class="dot"></span>Diagnóstico sin costo</span>
+      <span class="tf-marquee__item"><span class="dot"></span>Seguimiento por folio</span>
+      <span class="tf-marquee__item"><span class="dot"></span>Garantía por escrito</span>
+      <span class="tf-marquee__item"><span class="dot"></span>Técnicos capacitados</span>
+    }
+  </div>
+</div>
+
+<button
+  type="button"
+  class="tf-to-top"
+  [class.show]="mostrarArriba()"
+  (click)="irArriba()"
+  aria-label="Volver arriba"
+>
+  <span class="material-icons">arrow_upward</span>
+</button>
+
+<footer class="tf-footer">
+  <div class="tf-container tf-footer__grid">
+    <div>
+      <div class="tf-header__brand tf-footer__brand">
+        <img src="img/logo-icon-square.png" alt="" class="tf-header__mark" />
+        <span class="tf-header__name">TECNOFIX</span>
+      </div>
+      <p class="tf-footer__tagline">Soluciones tecnológicas que funcionan.</p>
+    </div>
+
+    <div class="tf-footer__col">
+      <h4>Empresa</h4>
+      <ul>
+        <li><a routerLink="/nosotros">Nosotros</a></li>
+        <li><a routerLink="/" fragment="servicios">Servicios</a></li>
+        <li><a routerLink="/" fragment="proceso">Proceso</a></li>
+      </ul>
+    </div>
+
+    <div class="tf-footer__col">
+      <h4>Contacto</h4>
+      <ul>
+        <li><a href="tel:+524273719797">427 371 9797</a></li>
+        <li><a href="mailto:alexwork049910@gmail.com">alexwork049910&#64;gmail.com</a></li>
+        <li>Lun–Sáb, 9:00–19:00</li>
+      </ul>
+    </div>
+
+    <div class="tf-footer__col">
+      <h4>Tu servicio</h4>
+      <ul>
+        <li><a routerLink="/consulta-folio">Consultar folio</a></li>
+        <li><a routerLink="/" fragment="contacto">Solicitar servicio</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tf-container tf-footer__bottom">
+    <p>&copy; 2026 TecnoFix. Todos los derechos reservados.</p>
+  </div>
+</footer>

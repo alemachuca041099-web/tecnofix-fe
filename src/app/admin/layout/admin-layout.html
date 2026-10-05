@@ -1,0 +1,42 @@
+<div class="tf-admin" [class.tf-admin--menu-open]="menuMovilAbierto()">
+  <aside class="tf-admin__sidebar">
+    <div class="tf-admin__brand">
+      <img src="img/logo-icon-square.png" alt="" class="tf-admin__mark" />
+      <span>TECNOFIX</span>
+      <button type="button" class="tf-admin__mobile-close" (click)="cerrarMenu()" aria-label="Cerrar menú">
+        <span class="material-icons">close</span>
+      </button>
+    </div>
+
+    <nav class="tf-admin__nav">
+      @for (enlace of enlaces; track enlace.ruta) {
+        <a [routerLink]="enlace.ruta" routerLinkActive="is-active" (click)="cerrarMenu()">
+          <span class="material-icons">{{ enlace.icono }}</span>
+          {{ enlace.etiqueta }}
+        </a>
+      }
+    </nav>
+
+    <div class="tf-admin__user">
+      <div class="tf-admin__user-info">
+        <span class="material-icons">account_circle</span>
+        <span>{{ usuario?.username }}</span>
+      </div>
+      <button type="button" class="tf-admin__logout" (click)="salir()">
+        <span class="material-icons">logout</span>
+        Salir
+      </button>
+    </div>
+  </aside>
+
+  <button type="button" class="tf-admin__mobile-toggle" (click)="alternarMenu()" aria-label="Abrir menú">
+    <span class="material-icons">{{ menuMovilAbierto() ? 'close' : 'menu' }}</span>
+    <span>TECNOFIX</span>
+  </button>
+
+  <main class="tf-admin__content">
+    <router-outlet />
+  </main>
+
+  <tf-confirm-dialog />
+</div>

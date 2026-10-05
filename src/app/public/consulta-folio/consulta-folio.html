@@ -1,0 +1,79 @@
+<section class="tf-cf-hero">
+  <div class="tf-container">
+    <span class="tf-eyebrow"><span class="idx">●</span>Seguimiento de servicio</span>
+    <h1>Consulta tu servicio</h1>
+    <p>Ingresa tu folio y el teléfono que registraste para ver en qué va tu equipo.</p>
+  </div>
+</section>
+
+<section class="tf-section">
+  <div class="tf-container tf-cf-layout">
+    <form class="tf-cf-form" (ngSubmit)="consultar()" #form="ngForm">
+      <label for="folio">Folio</label>
+      <input
+        id="folio"
+        name="folio"
+        type="text"
+        placeholder="TF-2026-00001"
+        [(ngModel)]="folio"
+        required
+        autocomplete="off"
+      />
+
+      <label for="telefono">Teléfono registrado</label>
+      <input
+        id="telefono"
+        name="telefono"
+        type="tel"
+        placeholder="10 dígitos"
+        [(ngModel)]="telefono"
+        required
+        autocomplete="off"
+      />
+
+      <button type="submit" class="tf-btn tf-btn--primary" [disabled]="cargando()">
+        {{ cargando() ? 'Consultando…' : 'Consultar' }}
+      </button>
+
+      @if (error()) {
+        <p class="tf-cf-error">{{ error() }}</p>
+      }
+    </form>
+
+    @if (resultado(); as r) {
+      <div class="tf-cf-resultado">
+        <div class="tf-cf-resultado__head">
+          <span class="tf-eyebrow">Folio</span>
+          <h2>{{ r.folio }}</h2>
+        </div>
+
+        <dl class="tf-cf-datos">
+          <div>
+            <dt>Equipo</dt>
+            <dd>{{ r.equipo.tipo }} — {{ r.equipo.marca }} {{ r.equipo.modelo }}</dd>
+          </div>
+          <div>
+            <dt>Servicio</dt>
+            <dd>{{ r.servicio_solicitado || 'Pendiente de diagnóstico' }}</dd>
+          </div>
+          <div>
+            <dt>Última actualización</dt>
+            <dd>{{ r.ultima_actualizacion | date: 'd/MM/yyyy, HH:mm' }}</dd>
+          </div>
+        </dl>
+
+        <ol class="tf-cf-stepper">
+          @for (paso of pasos; track paso.clave; let i = $index) {
+            <li
+              [class.is-done]="i <= indicePaso(r.estado)"
+              [class.is-current]="i === indicePaso(r.estado)"
+            >
+              <span class="tf-cf-stepper__dot"></span>
+              <span class="tf-cf-stepper__label">{{ paso.etiqueta }}</span>
+            </li>
+          }
+        </ol>
+      </div>
+    }
+  </div>
+</section>

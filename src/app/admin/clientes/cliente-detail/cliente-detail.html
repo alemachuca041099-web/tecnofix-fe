@@ -1,0 +1,95 @@
+@if (cliente(); as c) {
+  <div class="tf-page-head">
+    <div>
+      <a routerLink="/admin/clientes" class="tf-back-link">
+        <span class="material-icons">arrow_back</span>
+        Clientes
+      </a>
+      <h1>{{ c.nombre_completo }}</h1>
+      <p>Cliente desde {{ c.fecha_registro | date: 'd/MM/yyyy' }}</p>
+    </div>
+  </div>
+
+  <div class="tf-cd-grid">
+    <div class="tf-panel">
+      <h2>Datos de contacto</h2>
+      <div class="tf-form-grid">
+        <div><span class="tf-detail-label">Teléfono</span><p>{{ c.telefono }}</p></div>
+        <div><span class="tf-detail-label">WhatsApp</span><p>{{ c.whatsapp || '—' }}</p></div>
+        <div><span class="tf-detail-label">Correo</span><p>{{ c.correo || '—' }}</p></div>
+        <div><span class="tf-detail-label">Dirección</span><p>{{ c.direccion || '—' }}</p></div>
+        @if (c.notas) {
+          <div style="grid-column: 1 / -1;"><span class="tf-detail-label">Notas</span><p>{{ c.notas }}</p></div>
+        }
+      </div>
+    </div>
+
+    <div class="tf-panel">
+      <h2>Equipos ({{ c.equipos?.length || 0 }})</h2>
+      @if (c.equipos && c.equipos.length > 0) {
+        <div class="tf-table-wrap" style="border: none;">
+          <table class="tf-table">
+            <thead>
+              <tr>
+                <th>Equipo</th>
+                <th>Tipo</th>
+                <th>Serie / IMEI</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (equipo of c.equipos; track equipo.documentId) {
+                <tr>
+                  <td class="is-strong">{{ equipo.marca }} {{ equipo.modelo }}</td>
+                  <td>{{ equipo.tipo }}</td>
+                  <td>{{ equipo.numero_serie || equipo.imei_1 || '—' }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        <div class="tf-empty">Sin equipos registrados.</div>
+      }
+    </div>
+
+    <div class="tf-panel" style="grid-column: 1 / -1;">
+      <h2>Órdenes de servicio ({{ c.ordenes?.length || 0 }})</h2>
+      @if (c.ordenes && c.ordenes.length > 0) {
+        <div class="tf-table-wrap" style="border: none;">
+          <table class="tf-table">
+            <thead>
+              <tr>
+                <th>Folio</th>
+                <th>Equipo</th>
+                <th>Estado</th>
+                <th>Recepción</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (orden of c.ordenes; track orden.documentId) {
+                <tr [routerLink]="['/admin/ordenes', orden.documentId]" style="cursor: pointer;">
+                  <td class="is-strong">{{ orden.folio }}</td>
+                  <td>{{ orden.equipo?.tipo }} {{ orden.equipo?.marca }}</td>
+                  <td>
+                    <span class="tf-badge" [class]="'tf-badge--' + orden.estado">
+                      <span class="dot"></span>{{ orden.estado }}
+                    </span>
+                  </td>
+                  <td>{{ orden.fecha_recepcion | date: 'd/MM/yyyy' }}</td>
+                  <td><span class="material-icons" style="color: var(--text-muted);">chevron_right</span></td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        <div class="tf-empty">Sin órdenes de servicio todavía.</div>
+      }
+    </div>
+  </div>
+} @else if (cargando()) {
+  <div class="tf-empty">Cargando…</div>
+} @else {
+  <div class="tf-empty">No se encontró el cliente.</div>
+}

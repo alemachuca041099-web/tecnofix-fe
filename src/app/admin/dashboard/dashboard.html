@@ -1,0 +1,51 @@
+<div class="tf-page-head">
+  <div>
+    <h1>Dashboard</h1>
+    <p>Resumen general de la operación de TecnoFix.</p>
+  </div>
+  <a routerLink="/admin/ordenes" class="tf-btn tf-btn--primary tf-btn--sm">
+    Ver órdenes
+    <span class="material-icons">north_east</span>
+  </a>
+</div>
+
+@if (resumen(); as r) {
+  <div class="tf-stat-cards">
+    <div class="tf-stat-card">
+      <span class="n">{{ r.total_clientes }}</span>
+      <span class="l">Clientes</span>
+    </div>
+    <div class="tf-stat-card">
+      <span class="n">{{ r.servicios_del_mes }}</span>
+      <span class="l">Servicios del mes</span>
+    </div>
+    <div class="tf-stat-card">
+      <span class="n">{{ r.ingresos_del_mes | currency: 'MXN' : 'symbol-narrow' : '1.0-0' }}</span>
+      <span class="l">Ingresos del mes</span>
+    </div>
+    <div class="tf-stat-card">
+      <span class="n">{{ totalPorEstado('entregado') }}</span>
+      <span class="l">Entregados</span>
+    </div>
+  </div>
+
+  <div class="tf-panel">
+    <h2>Órdenes por estado</h2>
+    <div class="tf-stat-cards">
+      @for (estado of estados; track estado.valor) {
+        <div class="tf-stat-card">
+          <span class="n">{{ totalPorEstado(estado.valor) }}</span>
+          <span class="l">
+            <span class="tf-badge" [class]="'tf-badge--' + estado.valor">
+              <span class="dot"></span>{{ estado.etiqueta }}
+            </span>
+          </span>
+        </div>
+      }
+    </div>
+  </div>
+} @else if (cargando()) {
+  <div class="tf-empty">Cargando…</div>
+} @else {
+  <div class="tf-empty">No se pudo cargar el resumen.</div>
+}
